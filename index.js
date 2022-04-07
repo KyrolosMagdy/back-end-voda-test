@@ -1,13 +1,24 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const cors = require('cors')
+const cors = require('cors');
 const router = require('./routes/tasks');
+
+const sequelize = require('./utiles/database');
 
 const app = express();
 
-app.use(cors())
-app.use(bodyParser.urlencoded({ extended: false }))
+require('dotenv').config();
 
-app.use(router)
+app.use(cors());
+app.use(bodyParser.urlencoded({ extended: false }));
 
-app.listen(3001, () => console.log("App is Listining on port 3001"))
+app.use(router);
+
+sequelize
+  .sync()
+  .then((result) => {
+    app.listen(3001, () => console.log('App is Listining on port 3001'));
+  })
+  .catch((err) => {
+    console.log('err: ', err);
+  });
