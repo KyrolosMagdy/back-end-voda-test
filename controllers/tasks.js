@@ -32,9 +32,15 @@ exports.CreateTask = (req, res, next) => {
             const error = new Error(err);
             return next(error);
           });
+      } else {
+        const error = new Error('User not found');
+        return next(error);
       }
     })
-    .catch((err) => console.log('err: ', err));
+    .catch((err) => {
+      const error = new Error(err);
+      return next(error);
+    });
 };
 
 exports.GetTask = (req, res, next) => {

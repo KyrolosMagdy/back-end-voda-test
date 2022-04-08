@@ -1,5 +1,7 @@
 const express = require('express');
 const cors = require('cors');
+const helmet = require('helmet');
+
 const router = require('./routes/tasks');
 const userRouter = require('./routes/users');
 
@@ -13,13 +15,13 @@ require('dotenv').config();
 
 app.use(cors());
 app.use(express.json());
+app.use(helmet())
 
 app.use(router);
 app.use(userRouter);
 
 app.use((error, req, res, next) => {
-  console.log('error: ', error)
-  res.status(400).send(error);
+  res.status(400).send({message: 'Please try again later'});
 })
 
 User.hasOne(Task, {
