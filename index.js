@@ -24,6 +24,12 @@ Task.belongsTo(User, {
   foreignKey: 'createdBy',
 });
 
+User.hasOne(Task, {
+  foreignKey: 'assignedTo'
+});
+Task.belongsTo(User, {
+  foreignKey: "assignedTo"
+})
 // Sequelized.sync({ force: true })
 
 Sequelized.sync()

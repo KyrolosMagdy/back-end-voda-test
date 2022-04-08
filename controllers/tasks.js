@@ -2,22 +2,32 @@ const Task = require('../models/task');
 const User = require('../models/user');
 
 exports.CreateTask = (req, res) => {
-  const { title, description, userId } = req.body;
+  const { title, description, userId, assingedToId } = req.body;
 
   User.findByPk(userId).then((result) => {
     if (result) {
-      Task.create({
-        title,
-        description,
-        createdBy: userId,
-        status: 1,
+      User.findByPk(assingedToId).then(result => {
+        if (result) {
+          Task.create({
+            title,
+            description,
+            createdBy: userId,
+            status: 1,
+            assignedTo: assingedToId
+          })
+            .then((result) => {
+              res.send(result);
+            })
+            .catch((err) => {
+              console.log('err: ', err);
+            });
+        } else {
+          res.status(401).send({message: 'User not found'})
+        }
+      }).catch(err => {
+        console.log('err: ', err)
       })
-        .then((result) => {
-          res.send(result);
-        })
-        .catch((err) => {
-          console.log('err: ', err);
-        });
+      
     }
   }).catch(err => console.log('err: ', err));
 };
@@ -38,12 +48,13 @@ exports.GetAllTasks = (req, res) => {
 };
 
 exports.UpdateTask = (req, res) => {
-  const { id, title, description, userId } = req.body;
+  const { id, title, description, userId, assingedToId } = req.body;
   Task.update(
     {
       title,
       description,
       initiator: userId,
+      assignedTo: assingedToId
     },
     {
       where: { id: id },

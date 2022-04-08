@@ -11,4 +11,16 @@ exports.CreateUser = (req, res) => {
     }).catch(err => {
         console.log('err: ', err);
     })
+};
+
+exports.GetAllUsers = (req, res) => {
+    User.findAll().then(result => {
+        if (result) {
+            res.send(result);
+        } else {
+            res.status(400).send({message: 'Not Found'})
+        }
+    }).catch(err => {
+        console.log('err: ', err);
+    })
 }
