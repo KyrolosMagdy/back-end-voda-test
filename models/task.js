@@ -1,31 +1,27 @@
-const Sequelize = require('sequelize');
-const sequalize = require('../utiles/database');
+const { DataTypes } = require('sequelize');
+const Sequelized = require('../utiles/database');
 
-const Task = sequalize.define([
-    'task',
-    {
-        id: {
-            type: Sequelize.INTEGER,
-            autoIncrement: true,
-            allowNull: false,
-            primaryKey: true
-        },
-        title: {
-            type: Sequelize.STRING,
-            allowNull: false
-        },
-        description: {
-            type: Sequelize.STRING,
-            allowNull: false
-        },
-        status: {
-            type: Sequelize.NUMBER,
-            allowNull: false,
-        },
-        createdBy: {
-            type: Sequelize.STRING
-        }
-    },
-]);
+const Task = Sequelized.define('task', {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    allowNull: false,
+    primaryKey: true,
+  },
+  status: {
+    type: DataTypes.INTEGER
+  },
+  title: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  description: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  initiator: {
+    type: DataTypes.STRING,
+  }
+});
 
 module.exports = Task;

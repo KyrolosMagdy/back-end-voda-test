@@ -1,21 +1,19 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const cors = require('cors');
 const router = require('./routes/tasks');
 
-const sequelize = require('./utiles/database');
+const Sequelized = require('./utiles/database');
 
 const app = express();
 
 require('dotenv').config();
 
 app.use(cors());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.json());
 
 app.use(router);
 
-sequelize
-  .sync()
+Sequelized.sync()
   .then((result) => {
     app.listen(3001, () => console.log('App is Listining on port 3001'));
   })
