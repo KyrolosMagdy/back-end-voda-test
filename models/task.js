@@ -18,9 +18,6 @@ const Task = Sequelized.define('task', {
   description: {
     type: DataTypes.STRING,
     allowNull: false,
-  },
-  initiator: {
-    type: DataTypes.STRING,
   }
 });
 

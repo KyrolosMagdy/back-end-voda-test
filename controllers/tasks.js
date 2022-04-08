@@ -1,21 +1,25 @@
 const Task = require('../models/task');
+const User = require('../models/user');
 
 exports.CreateTask = (req, res) => {
   const { title, description, userId } = req.body;
-  console.log('title: ', JSON.stringify(req.body));
-  Task.create({
-    title,
-    description,
-    initiator: userId,
-    status: 1,
-  })
-    .then((result) => {
-      console.log('result: ', result);
-      res.send(result);
-    })
-    .catch((err) => {
-      console.log('err: ', err);
-    });
+
+  User.findByPk(userId).then((result) => {
+    if (result) {
+      Task.create({
+        title,
+        description,
+        createdBy: userId,
+        status: 1,
+      })
+        .then((result) => {
+          res.send(result);
+        })
+        .catch((err) => {
+          console.log('err: ', err);
+        });
+    }
+  }).catch(err => console.log('err: ', err));
 };
 
 exports.GetTask = (req, res) => {
@@ -55,14 +59,17 @@ exports.UpdateTask = (req, res) => {
 
 exports.DeleteTask = (req, res) => {
   const { id } = req.params;
-  Task.findByPk(id).then(result => {
+  Task.findByPk(id)
+    .then((result) => {
       if (result) {
-          return result.destroy()
+        return result.destroy();
       }
-      throw new Error('Not Found')
-  }).then(result => {
-      res.send({message: 'Task Deleted'})
-  }).catch(err => {
-      console.log('err: ', err)
-  })
+      throw new Error('Not Found');
+    })
+    .then((result) => {
+      res.send({ message: 'Task Deleted' });
+    })
+    .catch((err) => {
+      console.log('err: ', err);
+    });
 };
