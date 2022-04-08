@@ -17,6 +17,11 @@ app.use(express.json());
 app.use(router);
 app.use(userRouter);
 
+app.use((error, req, res, next) => {
+  console.log('error: ', error)
+  res.status(400).send(error);
+})
+
 User.hasOne(Task, {
   foreignKey: 'createdBy',
 });
@@ -29,7 +34,8 @@ User.hasOne(Task, {
 });
 Task.belongsTo(User, {
   foreignKey: "assignedTo"
-})
+});
+
 // Sequelized.sync({ force: true })
 
 Sequelized.sync()
